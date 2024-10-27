@@ -67,7 +67,7 @@ class ObsFlags(Flags):
         extract_coords (Literal['False', 'center', 'box']): Add the coordinates of the elements.
         filter_visible_elements_only (bool): Only show visible elements in the AXTree.
     """
-
+    is_visible: bool = True
     use_html: bool = True
     use_ax_tree: bool = False
     use_focused_element: bool = False
@@ -94,6 +94,7 @@ class ObsFlags(Flags):
 
 @dataclass
 class ActionFlags(Flags):
+    is_visible: bool = True
     multi_actions: bool = False
     action_set: str = "bid"
     is_strict: bool = False
@@ -369,6 +370,7 @@ class Observation(Shrinkable):
         super().__init__()
         self.flags = flags
         self.obs = obs
+        self._visible = flags.is_visible
         self.html = HTML(
             obs[flags.html_type],
             visible_elements_only=flags.filter_visible_elements_only,
@@ -536,6 +538,7 @@ click('a324')
         super().__init__()
         self.action_set = action_set
         self.action_flags = action_flags
+        self._visible = action_flags.is_visible
         action_set_generic_info = """\
 Note: This action set allows you to interact with your environment. Most of them
 are python function executing playwright code. The primary way of referring to

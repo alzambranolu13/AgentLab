@@ -233,7 +233,7 @@ def _convert_messages_to_dict(messages, column_remap={}):
 
     def convert_format_vision(message_content, role, text_key, image_key):
         result = {}
-        result["type"] = role
+        result["role"] = role
         for item in message_content:
             if item["type"] == "text":
                 result[text_key] = item["text"]
