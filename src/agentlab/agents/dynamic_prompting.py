@@ -24,6 +24,7 @@ from agentlab.llm.llm_utils import (
     extract_code_blocks,
     image_to_jpg_base64_url,
     parse_html_tags_raise,
+    upload_to_freeimage_host
 )
 
 
@@ -457,7 +458,9 @@ class Observation(Shrinkable):
             else:
                 screenshot = self.obs["screenshot"]
                 prompt.add_text("\n## Screenshot:\nHere is a screenshot of the page:")
-            img_url = image_to_jpg_base64_url(screenshot)
+            img_url = image_to_jpg_base64_url(screenshot) #old base64 doesn't work with Qwen
+            #img_url = upload_to_freeimage_host(screenshot)  # new
+            #prompt.add_text(f"<img>{img_url}</img>")
             prompt.add_image(img_url, detail=self.flags.openai_vision_detail)
         return prompt
 

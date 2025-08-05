@@ -367,6 +367,20 @@ def download_and_save_model(model_name: str, save_dir: str = "."):
     print(f"Model downloaded and saved to {save_dir}")
 
 
+def upload_to_freeimage_host(image):
+    import io
+    import requests
+
+    image = Image.fromarray(image) if isinstance(image, np.ndarray) else image
+    API_KEY = '6d207e02198a847aa98d0a2a901485a5'  # free to register
+    buffered = io.BytesIO()
+    image.save(buffered, format="JPEG")
+    files = {'source': buffered.getvalue()}
+    data = {'key': API_KEY, 'format': 'json'}
+
+    r = requests.post("https://freeimage.host/api/1/upload", data=data, files=files)
+    return r.json()['image']['display_url']  # or ['image']['url'] for raw
+
 def image_to_jpg_base64_url(image: np.ndarray | Image.Image):
     """Convert a numpy array to a base64 encoded image url."""
 
